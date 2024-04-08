@@ -1,25 +1,27 @@
 "use client";
 import InputField from "@/components/InputField";
 import React from "react";
-import { useForm, SubmitHandler ,FieldValues} from "react-hook-form";
+import {
+  useForm,
+  SubmitHandler,
+  FieldValues,
+  Controller,
+} from "react-hook-form";
 import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
+import SelectField from "@/components/SelectField";
 
 const categorySchema = z.object({
   email: z.string().email(),
   username: z.string().min(4).max(10),
   contact: z.string().min(11),
+  country: z.string().nonempty("Country is required"),
 });
-
-interface IFormInput {
-  email: string;
-  username: string;
-  contact: string;
-}
 
 const ADDCATEGORY = () => {
   const {
     register,
+    control,
     handleSubmit,
     formState: { errors },
   } = useForm({
@@ -55,6 +57,19 @@ const ADDCATEGORY = () => {
             inputProps={register("contact")}
             error={errors.contact?.message as string}
           />
+
+          <div>
+            <SelectField
+              id="country"
+              label="Country"
+              options={[
+                { value: "pakistan", label: "Pakistan" },
+                { value: "india", label: "India" },
+              ]}
+              inputProps={register("country")}
+              error={errors.country?.message as string}
+            />
+          </div>
 
           <div className="my-10">
             <button
